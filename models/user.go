@@ -1,7 +1,7 @@
 package models
 
 type User struct {
-	Id	int32 `gorethink:"id,omitempty" json:"id"`
+	Id	string `gorethink:"id,omitempty" json:"id"`
 	Email	string `json:"email" gorethink:"email"`
 	Name	string `json:"name" gorethink:"name"`
 	Salt string `json:"password" gorethink:"password"`

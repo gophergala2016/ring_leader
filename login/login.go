@@ -16,6 +16,7 @@ func Init(router *gin.Engine, DB *db.Session) {
 	loginRouter := router.Group("/login")
 	{
 		loginRouter.POST("/register", l.registerUser)
+		loginRouter.POST("/authorize", l.loginUser)
 	}
 }
 func (l *Login) registerUser(c *gin.Context) {
@@ -39,8 +40,19 @@ func (l *Login) registerUser(c *gin.Context) {
 	c.String(200, "worked")
 }
 
-func (l Login) LoginUser(form models.LoginUser) error {
-	return nil
+func (l Login) loginUser(c *gin.Context) {
+	var json models.LoginUser
+	if err := c.BindJSON(&json); err != nil {
+		c.String(500, err.Error())
+		return
+	}
+	service := &services.UserService{}
+	auth := service.AuthenticateUser(l.DB, json)
+	if auth == false {
+		c.String(500, "bad credentials")
+		return
+	}
+	c.String(200, "worked authenticated")
 }
 
 func (l Login) ChangeUser(form models.ChangeUser, id int32) error {
