@@ -1,0 +1,11 @@
+web:
+  build: .
+  command: ./start.sh
+  ports:
+   - "8080:8080"
+  volumes:
+   - ./:/ws/src/github.com/gophergala2016/ring_leader
+  links:
+   - rethinkdb
+rethinkdb:
+  image: rethinkdb:2.2.3
