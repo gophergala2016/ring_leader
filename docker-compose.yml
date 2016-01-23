@@ -9,3 +9,12 @@ web:
    - rethinkdb
 rethinkdb:
   image: rethinkdb:2.2.3
+  ports:
+   - "8081:8080"
+  volumes_from:
+    - dbData
+dbData:
+  image: alpine:3.3
+  volumes:
+    - ./.dbdata:/data
+  command: tail -f /dev/null
