@@ -18,6 +18,7 @@ func Init(router *gin.Engine, DB *db.Session) {
 	{
 		loginRouter.POST("/register", l.registerUser)
 		loginRouter.POST("/authorize", l.loginUser)
+		loginRouter.GET("/logout", l.logoutUser)
 	}
 }
 func (l *Login) registerUser(c *gin.Context) {
@@ -41,7 +42,7 @@ func (l *Login) registerUser(c *gin.Context) {
 	c.String(200, "worked")
 }
 
-func (l Login) loginUser(c *gin.Context) {
+func (l *Login) loginUser(c *gin.Context) {
 	var json models.LoginUser
 	if err := c.BindJSON(&json); err != nil {
 		c.String(500, err.Error())
@@ -54,9 +55,20 @@ func (l Login) loginUser(c *gin.Context) {
 		return
 	}
 	session := sessions.Default(c)
-	session.Set("user", user)
-	session.Save()
+	session.Set("user", *user)
+	err := session.Save()
+	if err != nil {
+		c.String(500,  err.Error())
+	}
 	c.String(200, "worked authenticated")
+}
+
+func (l *Login) logoutUser(c *gin.Context) {
+	session := sessions.Default(c)
+	session.Delete("user")
+	session.Save()
+	c.String(200, "worked unauthenticated")
+
 }
 
 func (l Login) ChangeUser(form models.ChangeUser, id int32) error {

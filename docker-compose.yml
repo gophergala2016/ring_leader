@@ -12,19 +12,10 @@ rethinkdb:
   image: rethinkdb:2.2.3
   ports:
    - "8081:8080"
-  volumes_from:
-    - dbData
-dbData:
-  image: alpine:3.3
   volumes:
     - ./.dbdata:/data
-  command: tail -f /dev/null
-redisData:
-  image: alpine:3.3
-  volumes:
-    - ./.redisdata:/data
-  command: tail -f /dev/null
 redis:
   image: redis:3.0.6-alpine
-  volumes_from:
-    - redisData
+  command: sh -c "exec gosu root redis-server --appendonly yes"
+  volumes:
+    - ./.redisdata:/data

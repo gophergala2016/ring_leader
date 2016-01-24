@@ -8,7 +8,9 @@ import (
 	"github.com/gophergala2016/ring_leader/api"
 	"github.com/gophergala2016/ring_leader/models"
 	"github.com/gophergala2016/ring_leader/login"
+	//"github.com/gophergala2016/ring_leader/settings"
 	"github.com/satori/go.uuid"
+	"encoding/gob"
 	"log"
 	"os"
 	"net/http"
@@ -26,15 +28,17 @@ func RequestAuthMiddleware() gin.HandlerFunc {
 		session := sessions.Default(c)
 		u := session.Get("user")
 		if u == nil {
+			c.Redirect(http.StatusTemporaryRedirect, "/ping")
 			// TODO Redirect
 		}
+		log.Printf("%T %v\n", u, u)
 		// Validate credentials
 		switch user := u.(type) {
 		case models.User:
 			_ = user
 			c.Next()
 		default:
-			c.Redirect(http.StatusMovedPermanently, "/ping")
+			c.Redirect(http.StatusTemporaryRedirect, "/ping")
 		}
 	}
 }
@@ -54,6 +58,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
+	gob.Register(models.User{})
 	r.Use(sessions.Sessions("session", store))
 	api.Init(r, DB, RequestAuthMiddleware)
 	login.Init(r, DB)
