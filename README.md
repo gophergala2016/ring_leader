@@ -1,7 +1,7 @@
 # Ring Leader
 ## One-Stop Shop for Automatic resource management for organizations
 
-_Started for the 2016 Gopher Gala_
+_Started for the 2016 [Gopher Gala](http://gophergala.com/)_
 
 # *Status: Not working.* Look at [checklist](#checklist)
 
