@@ -3,7 +3,7 @@
 
 _Started for the 2016 Gopher Gala_
 
-# *Status: Not working.* Look at [checklist](#Checklist)
+# *Status: Not working.* Look at [checklist](#checklist)
 
 ### Motivations
 - It's hard to keep track of resources used by employees.
