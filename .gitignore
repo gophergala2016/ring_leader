@@ -1,3 +1,4 @@
 *.sw*
+.dbdata/
 .redisdata
 ring_leader
