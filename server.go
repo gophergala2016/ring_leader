@@ -59,6 +59,7 @@ func main() {
 		log.Fatalln(err.Error())
 	}
 	db.TableCreate("users").RunWrite(DB)
+	db.TableCreate("resources").RunWrite(DB)
 	store, err := sessions.NewRedisStore(10, "tcp", fmt.Sprintf("%s:%d", os.Getenv("REDIS_1_PORT_6379_TCP_ADDR"), 6379), "", []byte(os.Getenv("REDIS_SECRET")))
 	if err != nil {
 		log.Fatalln(err.Error())

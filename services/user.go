@@ -44,7 +44,7 @@ func (s *UserService) AuthenticateUser(DB *db.Session, loginUser models.LoginUse
 	return true, &user
 }
 
-func (s UserService) InsertUser(DB *db.Session, createUser models.CreateUser) error {
+func (s *UserService) InsertUser(DB *db.Session, createUser models.CreateUser) error {
 	hash, err := passlib.Hash(createUser.Password)
 	if err != nil {
 		// couldn't hash password for some reason
