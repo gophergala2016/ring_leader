@@ -1,0 +1,9 @@
+package: github.com/gophergala2016/ring_leader
+import:
+- package: github.com/dancannon/gorethink
+- package: github.com/gin-gonic/contrib
+  subpackages:
+  - /sessions
+- package: github.com/gin-gonic/gin
+- package: github.com/satori/go.uuid
+- package: gopkg.in/hlandau/passlib.v1

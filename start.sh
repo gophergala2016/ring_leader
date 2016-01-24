@@ -1,3 +1,2 @@
 #!/bin/bash
-go get ./...
 go run server.go
