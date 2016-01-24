@@ -46,4 +46,3 @@ func Init(router *gin.Engine, DB *db.Session, fn func() gin.HandlerFunc) {
 	}
 
 }
-

@@ -6,6 +6,7 @@ import (
 	"gopkg.in/hlandau/passlib.v1"
 	"log"
 )
+
 type UserService struct {
 }
 
@@ -22,7 +23,6 @@ func (s *UserService) UserExistByEmail(DB *db.Session, email string) bool {
 	}
 	return cnt != 0
 }
-
 
 func (s *UserService) AuthenticateUser(DB *db.Session, loginUser models.LoginUser) (bool, *models.User) {
 	res, err := db.Table("users").Filter(db.Row.Field("email").Eq(loginUser.Email)).Run(DB)
@@ -52,10 +52,18 @@ func (s UserService) InsertUser(DB *db.Session, createUser models.CreateUser) er
 	}
 	user := models.User{
 		Email: createUser.Email,
-		Name: createUser.Name,
-		Salt: hash,
+		Name:  createUser.Name,
+		Salt:  hash,
 	}
 	_, err = db.Table("users").Insert(user).RunWrite(DB)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *UserService) RemoveUser(DB *db.Session, user models.User) error {
+	_, err := db.Table("users").Get(user.Id).Delete().RunWrite(DB)
 	if err != nil {
 		return err
 	}
