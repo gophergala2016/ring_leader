@@ -2,7 +2,8 @@
 ## One-Stop Shop for Automatic resource management for organizations
 
 _Started for the 2016 Gopher Gala_
-Status: Not working. Look at [checklist](#Checklist)
+
+# *Status: Not working.* Look at [checklist](#Checklist)
 
 ### Motivations
 - It's hard to keep track resources used by employees.
