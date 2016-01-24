@@ -5,6 +5,7 @@ import (
 	"github.com/gophergala2016/ring_leader/models"
 	"github.com/gophergala2016/ring_leader/services"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/contrib/sessions"
 )
 
 type Login struct {
@@ -47,11 +48,14 @@ func (l Login) loginUser(c *gin.Context) {
 		return
 	}
 	service := &services.UserService{}
-	auth := service.AuthenticateUser(l.DB, json)
+	auth, user := service.AuthenticateUser(l.DB, json)
 	if auth == false {
 		c.String(500, "bad credentials")
 		return
 	}
+	session := sessions.Default(c)
+	session.Set("user", user)
+	session.Save()
 	c.String(200, "worked authenticated")
 }
 

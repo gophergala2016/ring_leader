@@ -24,21 +24,24 @@ func (s *UserService) UserExistByEmail(DB *db.Session, email string) bool {
 }
 
 
-func (s *UserService) AuthenticateUser(DB *db.Session, loginUser models.LoginUser) bool {
+func (s *UserService) AuthenticateUser(DB *db.Session, loginUser models.LoginUser) (bool, *models.User) {
 	res, err := db.Table("users").Filter(db.Row.Field("email").Eq(loginUser.Email)).Run(DB)
 	defer res.Close()
 	if err != nil {
 		log.Println(err.Error() + "hi")
-		return false
+		return false, nil
 	}
 	var user models.User
 	err = res.One(&user)
 	if err != nil {
 		log.Println(err.Error() + "hi2")
-		return false
+		return false, nil
 	}
 	err = passlib.VerifyNoUpgrade(loginUser.Password, user.Salt)
-	return err == nil
+	if err != nil {
+		return false, nil
+	}
+	return true, &user
 }
 
 func (s UserService) InsertUser(DB *db.Session, createUser models.CreateUser) error {

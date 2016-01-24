@@ -4,17 +4,38 @@ import (
 	"fmt"
 	db "github.com/dancannon/gorethink"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gophergala2016/ring_leader/api"
+	"github.com/gophergala2016/ring_leader/models"
 	"github.com/gophergala2016/ring_leader/login"
 	"github.com/satori/go.uuid"
 	"log"
 	"os"
+	"net/http"
 )
 
 func RequestIdMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("X-Request-Id", uuid.NewV4().String())
 		c.Next()
+	}
+}
+
+func RequestAuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+		u := session.Get("user")
+		if u == nil {
+			// TODO Redirect
+		}
+		// Validate credentials
+		switch user := u.(type) {
+		case models.User:
+			_ = user
+			c.Next()
+		default:
+			c.Redirect(http.StatusMovedPermanently, "/ping")
+		}
 	}
 }
 
@@ -29,7 +50,12 @@ func main() {
 		log.Fatalln(err.Error())
 	}
 	db.TableCreate("users").RunWrite(DB)
-	api.Init(r, DB)
+	store, err := sessions.NewRedisStore(10, "tcp", fmt.Sprintf("%s:%d", os.Getenv("REDIS_1_PORT_6379_TCP_ADDR"), 6379), "", []byte(os.Getenv("REDIS_SECRET")))
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+	r.Use(sessions.Sessions("session", store))
+	api.Init(r, DB, RequestAuthMiddleware)
 	login.Init(r, DB)
 	r.GET("/ping", func(c *gin.Context) {
 		if DB.IsConnected() {

@@ -7,6 +7,7 @@ web:
    - ./:/ws/src/github.com/gophergala2016/ring_leader
   links:
    - rethinkdb
+   - redis
 rethinkdb:
   image: rethinkdb:2.2.3
   ports:
@@ -18,3 +19,12 @@ dbData:
   volumes:
     - ./.dbdata:/data
   command: tail -f /dev/null
+redisData:
+  image: alpine:3.3
+  volumes:
+    - ./.redisdata:/data
+  command: tail -f /dev/null
+redis:
+  image: redis:3.0.6-alpine
+  volumes_from:
+    - redisData

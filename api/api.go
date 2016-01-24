@@ -29,11 +29,12 @@ func (a *API) updatePolicy(c *gin.Context) {
 	c.JSON(200, "")
 }
 
-func Init(router *gin.Engine, DB *db.Session) {
+func Init(router *gin.Engine, DB *db.Session, fn func() gin.HandlerFunc) {
 	// Simple group: v1
 	api := &API{DB}
 	v1 := router.Group("/v1")
 	{
+		v1.Use(fn())
 		policies := v1.Group("policies")
 		{
 			policies.POST("/", api.createPolicy)
