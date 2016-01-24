@@ -24,6 +24,11 @@ _Started for the 2016 [Gopher Gala](http://gophergala.com/)_
   - The API address can be found by typing `echo $(docker-machine ip $DOCKER_MACHINE_NAME):8080`
   - The RethinkDB UI can be found by typing `echo $(docker-machine ip $DOCKER_MACHINE_NAME):8081`
 
+### Development
+- Make sure to use `glide` for dependencies.
+- Set `GO15VENDOREXPERIMENT` to `1`.
+- Code on your personal computer then run `docker-compose up web` to start and `ctrl-c` to quit.
+
 ### Technology
 - Redis for session management storage
 - RethinkDB (trying for giggles) for subscription of live policies and resources to monitor
