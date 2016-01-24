@@ -6,10 +6,14 @@ _Started for the 2016 Gopher Gala_
 # *Status: Not working.* Look at [checklist](#Checklist)
 
 ### Motivations
-- It's hard to keep track resources used by employees.
-- It's hard to know when policies for resources.
+- It's hard to keep track of resources used by employees.
+- It's hard to know the retention policies for resources.
 - It's hard to know who is in charge of the resources.
 - Easy to onboard and off board people for resources.
+
+### Target Audience
+- Small software shops / start ups.
+  - For those without an extensive IT department, the infrastructure, or resources to create such a tool. 
 
 ### About
 - Ring Leader is meant to be an all-in-one solution for resource management.
